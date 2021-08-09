@@ -13,7 +13,7 @@ type MongoDBClient struct {
 	databaseName   string
 }
 
-func MongoDbClient(databaseName string) *MongoDBClient {
+func NewMongoDbClient(databaseName string) *MongoDBClient {
 	ctx := context.Background()
 	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017/")
 
