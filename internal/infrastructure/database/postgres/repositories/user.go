@@ -1,6 +1,6 @@
 package repositories
 
-import "github.com/hizagi/esperto-bots/internal/infrastructure/storage/postgres"
+import "github.com/hizagi/esperto-bots/internal/infrastructure/database/postgres"
 
 type UserRepository struct {
 	databaseClient *postgres.PostgresClient

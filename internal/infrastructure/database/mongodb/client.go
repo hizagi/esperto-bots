@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 
+	"github.com/hizagi/esperto-bots/internal/infrastructure/config/viper"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -13,9 +14,9 @@ type MongoDBClient struct {
 	databaseName   string
 }
 
-func NewMongoDbClient(databaseName string) *MongoDBClient {
+func NewMongoDbClient(mongoConfiguration viper.MongoConfiguration) *MongoDBClient {
 	ctx := context.Background()
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017/")
+	clientOptions := options.Client().ApplyURI(mongoConfiguration.GetDatabaseURL())
 
 	client, err := mongo.Connect(ctx, clientOptions)
 	if err != nil {
@@ -29,7 +30,7 @@ func NewMongoDbClient(databaseName string) *MongoDBClient {
 
 	return &MongoDBClient{
 		client,
-		databaseName,
+		mongoConfiguration.DatabaseName,
 	}
 }
 

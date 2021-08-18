@@ -15,6 +15,6 @@ func NewUserService(userRepository interfaces.IUserRepository) *UserService {
 	}
 }
 
-func (service *UserService) GetUser(id string) entities.User {
+func (service *UserService) GetUser(id string) (*entities.User, error) {
 	return service.userRepository.GetUser(id)
 }
