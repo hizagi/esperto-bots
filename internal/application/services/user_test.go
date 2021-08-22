@@ -5,31 +5,17 @@ import (
 
 	"github.com/hizagi/esperto-bots/internal/application/services"
 	"github.com/hizagi/esperto-bots/internal/domain/entities"
-	"github.com/hizagi/esperto-bots/internal/infrastructure/database/mongodb/mocks/repositories"
-	"github.com/stretchr/testify/mock"
-	"gotest.tools/v3/assert"
+	"github.com/hizagi/esperto-bots/internal/infrastructure/database/mongodb/repositories"
+	"github.com/hizagi/esperto-bots/internal/infrastructure/test"
+	"github.com/hizagi/esperto-bots/internal/infrastructure/test/container/mongodb"
 )
 
 func TestGetUserMongo(t *testing.T) {
-	userRepository := repositories.NewUserRepositoryMock()
+	var users []entities.User
 
-	userRepository.On("GetUser", mock.AnythingOfType("string")).Return(&entities.User{
-		ID:        "1",
-		Name:      "joao",
-		Lastname:  "vitor",
-		Email:     "joao@ferraz.com",
-		Password:  "123",
-		Document:  "33251235",
-		BirthDate: "04/02/1997",
-	}, nil)
+	test.LoadMockData("users.json", &users)
 
-	userService := services.NewUserService(userRepository)
-
-	user, err := userService.GetUser("1")
-
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	assert.Equal(t, "joao", user.Name)
+	mongoClient, _ := mongodb.SetupDatabase(t, "users", users)
+	userRespository := repositories.NewUserRepository(mongoClient)
+	userService := services.NewUserService(userRespository)
 }
