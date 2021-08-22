@@ -3,7 +3,7 @@ package viper
 import "fmt"
 
 type MongoConfiguration struct {
-	DatabaseConfiguration
+	DatabaseConfiguration `mapstructure:",squash"`
 }
 
 func (configuration *MongoConfiguration) GetDatabaseURL() string {

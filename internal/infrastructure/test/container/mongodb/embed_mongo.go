@@ -8,24 +8,30 @@ import (
 
 	"github.com/docker/go-connections/nat"
 	"github.com/hizagi/esperto-bots/internal/infrastructure/config/viper"
+	"github.com/hizagi/esperto-bots/internal/infrastructure/utils"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 )
 
 const (
-	image  = "mongo:4.4.3"
-	logMsg = "database system is ready to accept connections"
+	image        = "mongo:4.4.3"
+	logMsg       = "Waiting for connections"
+	mockFileName = "mongo.js"
 )
 
 //EmbeddedPostgres spins up a postgres container.
-func EmbedMongo(t *testing.T, configuration viper.MongoConfiguration) (string, int) {
+func EmbedMongo(t *testing.T, rootPath string, configuration viper.MongoConfiguration) (string, int) {
 	t.Helper()
+
+	path := utils.GetMockDataDirectory(rootPath, mockFileName)
+
 	ctx := context.Background()
 	natPort := fmt.Sprintf("%d/tcp", 27017)
 	// Setup and startup container
 	req := testcontainers.ContainerRequest{
 		Image:        image,
 		ExposedPorts: []string{natPort},
+		BindMounts:   map[string]string{path: "/docker-entrypoint-initdb.d/init.js"},
 		Env: map[string]string{
 			"MONGO_INITDB_ROOT_USERNAME": configuration.Username,
 			"MONGO_INITDB_ROOT_PASSWORD": configuration.Password,
