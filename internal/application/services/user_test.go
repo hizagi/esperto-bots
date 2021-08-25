@@ -10,7 +10,7 @@ import (
 )
 
 func TestGetUserMongo(t *testing.T) {
-	mongoClient, _ := mongodb.SetupDatabase(t, "../../../")
+	mongoClient, _ := mongodb.SetupDatabase(t, "../../../", []string{"user.js"})
 
 	userRepository := repositories.NewUserRepository(mongoClient)
 

@@ -1,4 +1,4 @@
-package interfaces
+package repositories
 
 import "github.com/hizagi/esperto-bots/internal/domain/entities"
 

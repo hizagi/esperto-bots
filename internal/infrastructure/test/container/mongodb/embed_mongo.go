@@ -14,16 +14,15 @@ import (
 )
 
 const (
-	image        = "mongo:4.4.3"
-	logMsg       = "Waiting for connections"
-	mockFileName = "mongo.js"
+	image  = "mongo:4.4.3"
+	logMsg = "Waiting for connections"
 )
 
 //EmbeddedPostgres spins up a postgres container.
-func EmbedMongo(t *testing.T, rootPath string, configuration viper.MongoConfiguration) (string, int) {
+func EmbedMongo(t *testing.T, rootPath string, mockFiles []string, configuration viper.MongoConfiguration) (string, int) {
 	t.Helper()
 
-	path := utils.GetMockDataDirectory(rootPath, mockFileName)
+	paths := utils.GetMockDataDirectory(rootPath, mockFiles)
 
 	ctx := context.Background()
 	natPort := fmt.Sprintf("%d/tcp", 27017)
@@ -31,7 +30,7 @@ func EmbedMongo(t *testing.T, rootPath string, configuration viper.MongoConfigur
 	req := testcontainers.ContainerRequest{
 		Image:        image,
 		ExposedPorts: []string{natPort},
-		BindMounts:   map[string]string{path: "/docker-entrypoint-initdb.d/init.js"},
+		BindMounts:   paths,
 		Env: map[string]string{
 			"MONGO_INITDB_ROOT_USERNAME": configuration.Username,
 			"MONGO_INITDB_ROOT_PASSWORD": configuration.Password,
