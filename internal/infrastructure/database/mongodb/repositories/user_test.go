@@ -1,4 +1,4 @@
-package services_test
+package repositories_test
 
 import (
 	"testing"
@@ -10,7 +10,7 @@ import (
 )
 
 func TestGetUserMongo(t *testing.T) {
-	mongoClient, _ := mongodb.SetupDatabase(t, "../../../", []string{"user.js"})
+	mongoClient, _ := mongodb.SetupDatabase(t, toRoot, []string{"user.js"})
 
 	userRepository := repositories.NewUserRepository(mongoClient)
 

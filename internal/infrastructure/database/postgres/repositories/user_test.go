@@ -1,0 +1,28 @@
+package repositories_test
+
+import (
+	"testing"
+
+	"github.com/hizagi/esperto-bots/internal/application/services"
+	"github.com/hizagi/esperto-bots/internal/infrastructure/database/postgres/repositories"
+	"github.com/hizagi/esperto-bots/internal/infrastructure/test/container/postgres"
+	"gotest.tools/v3/assert"
+)
+
+const toRoot = "../../../../../"
+
+func TestGetUserMongo(t *testing.T) {
+	postgresClient, _ := postgres.SetupDatabase(t, toRoot, []string{"user.sql"})
+
+	userRepository := repositories.NewUserRepository(postgresClient)
+
+	userService := services.NewUserService(userRepository)
+
+	user, err := userService.GetUser("6122557b844c5e9e368e7dd6")
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assert.Equal(t, "joao", user.Name)
+}

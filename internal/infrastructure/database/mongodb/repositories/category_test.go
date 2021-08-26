@@ -1,4 +1,4 @@
-package services_test
+package repositories_test
 
 import (
 	"log"
@@ -10,8 +10,10 @@ import (
 	"gotest.tools/v3/assert"
 )
 
+const toRoot = "../../../../../" 
+
 func TestGetCategoryMongo(t *testing.T) {
-	mongoClient, _ := mongodb.SetupDatabase(t, "../../../", []string{"category.js"})
+	mongoClient, _ := mongodb.SetupDatabase(t, toRoot, []string{"category.js"})
 
 	categoryRepository := repositories.NewCategoryRepository(mongoClient)
 
@@ -27,7 +29,7 @@ func TestGetCategoryMongo(t *testing.T) {
 }
 
 func TestListCategoriesMongo(t *testing.T) {
-	mongoClient, _ := mongodb.SetupDatabase(t, "../../../", []string{"category.js"})
+	mongoClient, _ := mongodb.SetupDatabase(t, toRoot, []string{"category.js"})
 
 	categoryRepository := repositories.NewCategoryRepository(mongoClient)
 

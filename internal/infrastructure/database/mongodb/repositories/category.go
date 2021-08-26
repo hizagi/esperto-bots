@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/hizagi/esperto-bots/internal/domain/entities"
 	"github.com/hizagi/esperto-bots/internal/infrastructure/database/mongodb"
@@ -64,6 +65,8 @@ func (repository *CategoryRepository) ListCategory(lastID string, pageSize int) 
 		if err != nil {
 			return nil, err
 		}
+
+		fmt.Printf("ToDomain: %+v", category.ToDomain())
 
 		categories = append(categories, category.ToDomain())
 	}

@@ -19,10 +19,10 @@ const (
 )
 
 //EmbeddedPostgres spins up a postgres container.
-func EmbedMongo(t *testing.T, rootPath string, mockFiles []string, configuration viper.MongoConfiguration) (string, int) {
+func EmbedMongo(t *testing.T, rootPath string, seedFiles []string, configuration viper.MongoConfiguration) (string, int) {
 	t.Helper()
 
-	paths := utils.GetMockDataDirectory(rootPath, mockFiles)
+	paths := utils.GetSeedDataDirectory(rootPath, "seeds/mongodb", seedFiles)
 
 	ctx := context.Background()
 	natPort := fmt.Sprintf("%d/tcp", 27017)

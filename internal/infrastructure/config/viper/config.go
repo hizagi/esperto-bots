@@ -7,7 +7,8 @@ import (
 )
 
 type Configuration struct {
-	MongoConfiguration MongoConfiguration `mapstructure:"mongo_configuration"`
+	MongoConfiguration    MongoConfiguration    `mapstructure:"mongo_configuration"`
+	PostgresConfiguration PostgresConfiguration `mapstructure:"postgres_configuration"`
 }
 
 func NewConfiguration(rootPath string) *Configuration {
@@ -19,14 +20,14 @@ func NewConfiguration(rootPath string) *Configuration {
 		panic(fmt.Errorf("Fatal error config file: %w \n", err))
 	}
 
-	fmt.Printf("Testing Config: %+v", viper.AllKeys())
-
 	var configuration Configuration
 
 	err = viper.Unmarshal(&configuration)
 	if err != nil {
 		return &Configuration{}
 	}
+
+	fmt.Printf("Config Loaded: %+v \n\n", configuration)
 
 	return &configuration
 }

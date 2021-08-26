@@ -1,22 +1,15 @@
 package utils
 
-import (
-	"os"
-	"path/filepath"
-)
-
-const mockDir = "seeds"
 const databaseContainerSeedDir = "/docker-entrypoint-initdb.d/"
 
-func GetMockDataDirectory(rootPath string, mockFiles []string) map[string]string {
+func GetSeedDataDirectory(toRootPath string, seedDir string, seedFiles []string) map[string]string {
 	paths := make(map[string]string, 0)
 
-	for _, mockFile := range mockFiles {
+	for _, seedFile := range seedFiles {
 
-		currentPath, _ := os.Getwd()
-		path := (filepath.ToSlash(currentPath) + "/" + rootPath + "/" + mockDir + "/" + mockFile)
+		path := FromRootPath(toRootPath, seedDir+"/"+seedFile)
 
-		paths[path] = databaseContainerSeedDir + mockFile
+		paths[path] = databaseContainerSeedDir + seedFile
 	}
 
 	return paths

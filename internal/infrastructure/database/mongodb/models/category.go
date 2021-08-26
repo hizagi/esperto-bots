@@ -19,7 +19,7 @@ type Category struct {
 
 func (category *Category) ToDomain() *entities.Category {
 	return &entities.Category{
-		ID:        category.ID.String(),
+		ID:        category.ID.Hex(),
 		ParentID:  category.ParentID,
 		Name:      category.Name,
 		Slug:      category.Slug,
