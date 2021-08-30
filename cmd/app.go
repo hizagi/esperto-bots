@@ -13,7 +13,7 @@ func main() {
 
 	defer postgresClient.Close()
 
-	if err := goose.Up(postgresClient.Connection, utils.FromRootPath("./", "/migrations/postgres")); err != nil {
+	if err := goose.Up(postgresClient.Connection, utils.FromRootPath("./", "internal/database/postgres/migrations")); err != nil {
 		panic(err)
 	}
 

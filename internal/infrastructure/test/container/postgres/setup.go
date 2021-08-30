@@ -5,12 +5,13 @@ import (
 
 	"github.com/hizagi/esperto-bots/internal/infrastructure/config/viper"
 	"github.com/hizagi/esperto-bots/internal/infrastructure/database/postgres"
+	"github.com/hizagi/esperto-bots/projectpath"
 )
 
-func SetupDatabase(t *testing.T, toRootPath string, seedFiles []string) (*postgres.PostgresClient, *viper.Configuration) {
-	configuration := viper.NewConfiguration(toRootPath)
+func SetupDatabase(t *testing.T, seedFiles []string) (*postgres.PostgresClient, *viper.Configuration) {
+	configuration := viper.NewConfiguration(projectpath.Root)
 
-	host, port := EmbedPostgres(t, toRootPath, seedFiles, configuration.PostgresConfiguration)
+	host, port := EmbedPostgres(t, seedFiles, configuration.PostgresConfiguration)
 
 	configuration.PostgresConfiguration.Host = host
 	configuration.PostgresConfiguration.Port = port

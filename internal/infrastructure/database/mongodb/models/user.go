@@ -30,7 +30,7 @@ func (user *User) ToDomain() *entities.User {
 		Document:  user.Document,
 		BirthDate: user.BirthDate,
 		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
-		DeletedAt: user.DeletedAt,
+		UpdatedAt: &user.UpdatedAt,
+		DeletedAt: &user.DeletedAt,
 	}
 }

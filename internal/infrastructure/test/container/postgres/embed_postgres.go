@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"testing"
@@ -9,6 +10,7 @@ import (
 	"github.com/docker/go-connections/nat"
 	"github.com/hizagi/esperto-bots/internal/infrastructure/config/viper"
 	"github.com/hizagi/esperto-bots/internal/infrastructure/utils"
+	"github.com/hizagi/esperto-bots/projectpath"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 )
@@ -19,17 +21,17 @@ const (
 )
 
 //EmbedPostgres spins up a postgres container.
-func EmbedPostgres(t *testing.T, rootPath string, seedFiles []string, configuration viper.PostgresConfiguration) (string, int) {
+func EmbedPostgres(t *testing.T, seedFiles []string, configuration viper.PostgresConfiguration) (string, int) {
 	t.Helper()
 
-	migrationFiles := utils.GetFilenamesFromDir(utils.FromRootPath(rootPath, "migrations/postgres"))
+	// paths := utils.GetMigrationsDataDirectory("postgres")
+	pathsSeeds := utils.GetSeedDataDirectory("postgres", seedFiles)
 
-	paths := utils.GetSeedDataDirectory(rootPath, "migrations/postgres", migrationFiles)
-	pathsSeeds := utils.GetSeedDataDirectory(rootPath, "seeds/postgres", seedFiles)
+	// for localPath, containerPath := range pathsSeeds {
+	// 	paths[localPath] = containerPath
+	// }
 
-	for localPath, containerPath := range pathsSeeds {
-		paths[localPath] = containerPath
-	}
+	fmt.Printf("TESTANDO: \n Config: %+v, \nRoot: %s, \n Paths: %+v", configuration, projectpath.Root, pathsSeeds)
 
 	ctx := context.Background()
 	natPort := fmt.Sprintf("%d/tcp", 5432)
@@ -37,7 +39,7 @@ func EmbedPostgres(t *testing.T, rootPath string, seedFiles []string, configurat
 	req := testcontainers.ContainerRequest{
 		Image:        image,
 		ExposedPorts: []string{natPort},
-		BindMounts:   paths,
+		BindMounts:   pathsSeeds,
 		Env: map[string]string{
 			"POSTGRES_USER":     configuration.Username,
 			"POSTGRES_PASSWORD": configuration.Password,
@@ -55,6 +57,12 @@ func EmbedPostgres(t *testing.T, rootPath string, seedFiles []string, configurat
 		},
 	)
 	if err != nil {
+		reader, _ := pg.Logs(ctx)
+		buf := new(bytes.Buffer)
+		buf.ReadFrom(reader)
+
+		fmt.Printf("CONTAINER LOGS: %s", buf.String())
+
 		t.Error(err)
 	}
 	// Even after log message found Postgres needs a touch more...

@@ -9,6 +9,7 @@ import (
 	"github.com/docker/go-connections/nat"
 	"github.com/hizagi/esperto-bots/internal/infrastructure/config/viper"
 	"github.com/hizagi/esperto-bots/internal/infrastructure/utils"
+	"github.com/hizagi/esperto-bots/projectpath"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 )
@@ -19,10 +20,12 @@ const (
 )
 
 //EmbeddedPostgres spins up a postgres container.
-func EmbedMongo(t *testing.T, rootPath string, seedFiles []string, configuration viper.MongoConfiguration) (string, int) {
+func EmbedMongo(t *testing.T, seedFiles []string, configuration viper.MongoConfiguration) (string, int) {
 	t.Helper()
 
-	paths := utils.GetSeedDataDirectory(rootPath, "seeds/mongodb", seedFiles)
+	paths := utils.GetSeedDataDirectory("mongodb", seedFiles)
+
+	fmt.Printf("TESTANDO: \n Root: %s, \n Paths: %+v", projectpath.Root, paths)
 
 	ctx := context.Background()
 	natPort := fmt.Sprintf("%d/tcp", 27017)

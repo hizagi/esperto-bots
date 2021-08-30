@@ -4,22 +4,17 @@ import (
 	"log"
 	"testing"
 
-	"github.com/hizagi/esperto-bots/internal/application/services"
 	"github.com/hizagi/esperto-bots/internal/infrastructure/database/mongodb/repositories"
 	"github.com/hizagi/esperto-bots/internal/infrastructure/test/container/mongodb"
 	"gotest.tools/v3/assert"
 )
 
-const toRoot = "../../../../../" 
-
 func TestGetCategoryMongo(t *testing.T) {
-	mongoClient, _ := mongodb.SetupDatabase(t, toRoot, []string{"category.js"})
+	mongoClient, _ := mongodb.SetupDatabase(t, []string{"category.js"})
 
 	categoryRepository := repositories.NewCategoryRepository(mongoClient)
 
-	categoryService := services.NewCategoryService(categoryRepository)
-
-	category, err := categoryService.GetCategory("6122557b844c5e9e368e7dd6")
+	category, err := categoryRepository.GetCategory("6122557b844c5e9e368e7dd6")
 
 	if err != nil {
 		t.Fatal(err)
@@ -29,13 +24,11 @@ func TestGetCategoryMongo(t *testing.T) {
 }
 
 func TestListCategoriesMongo(t *testing.T) {
-	mongoClient, _ := mongodb.SetupDatabase(t, toRoot, []string{"category.js"})
+	mongoClient, _ := mongodb.SetupDatabase(t, []string{"category.js"})
 
 	categoryRepository := repositories.NewCategoryRepository(mongoClient)
 
-	categoryService := services.NewCategoryService(categoryRepository)
-
-	categories, err := categoryService.ListCategory("6122557b844c5e9e368e7dd6", 2)
+	categories, err := categoryRepository.ListCategory("6122557b844c5e9e368e7dd6", 2)
 
 	if err != nil {
 		t.Fatal(err)

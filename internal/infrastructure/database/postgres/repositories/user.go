@@ -1,6 +1,9 @@
 package repositories
 
 import (
+	"context"
+
+	"github.com/georgysavva/scany/sqlscan"
 	"github.com/hizagi/esperto-bots/internal/domain/entities"
 	"github.com/hizagi/esperto-bots/internal/infrastructure/database/postgres"
 )
@@ -17,7 +20,8 @@ func NewUserRepository(databaseClient *postgres.PostgresClient) *UserRepository 
 
 func (repository *UserRepository) GetUser(id string) (*entities.User, error) {
 	var user entities.User
-	err := repository.databaseClient.Connection.QueryRow("SELECT * from users where id = ?", id).Scan(&user)
+
+	err := sqlscan.Get(context.Background(), repository.databaseClient.Connection, &user, "SELECT * from users where id = $1", id)
 
 	if err != nil {
 		return nil, err
