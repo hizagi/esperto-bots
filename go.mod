@@ -6,6 +6,7 @@ require (
 	github.com/docker/go-connections v0.4.0
 	github.com/georgysavva/scany v0.2.9
 	github.com/jackc/pgx/v4 v4.13.0
+	github.com/kristijorgji/goseeder v1.0.2
 	github.com/pressly/goose v2.7.0+incompatible
 	github.com/spf13/viper v1.8.1
 	github.com/testcontainers/testcontainers-go v0.11.1

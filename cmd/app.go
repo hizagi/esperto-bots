@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/hizagi/esperto-bots/internal/infrastructure/config/viper"
 	"github.com/hizagi/esperto-bots/internal/infrastructure/database/postgres"
-	"github.com/hizagi/esperto-bots/internal/infrastructure/utils"
 	"github.com/pressly/goose"
 )
 
@@ -13,7 +12,7 @@ func main() {
 
 	defer postgresClient.Close()
 
-	if err := goose.Up(postgresClient.Connection, utils.FromRootPath("./", "internal/database/postgres/migrations")); err != nil {
+	if err := goose.Up(postgresClient.Connection, postgres.MigrationPath()); err != nil {
 		panic(err)
 	}
 

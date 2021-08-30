@@ -9,8 +9,6 @@ import (
 
 	"github.com/docker/go-connections/nat"
 	"github.com/hizagi/esperto-bots/internal/infrastructure/config/viper"
-	"github.com/hizagi/esperto-bots/internal/infrastructure/utils"
-	"github.com/hizagi/esperto-bots/projectpath"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 )
@@ -24,22 +22,12 @@ const (
 func EmbedPostgres(t *testing.T, seedFiles []string, configuration viper.PostgresConfiguration) (string, int) {
 	t.Helper()
 
-	// paths := utils.GetMigrationsDataDirectory("postgres")
-	pathsSeeds := utils.GetSeedDataDirectory("postgres", seedFiles)
-
-	// for localPath, containerPath := range pathsSeeds {
-	// 	paths[localPath] = containerPath
-	// }
-
-	fmt.Printf("TESTANDO: \n Config: %+v, \nRoot: %s, \n Paths: %+v", configuration, projectpath.Root, pathsSeeds)
-
 	ctx := context.Background()
 	natPort := fmt.Sprintf("%d/tcp", 5432)
 	// Setup and startup container
 	req := testcontainers.ContainerRequest{
 		Image:        image,
 		ExposedPorts: []string{natPort},
-		BindMounts:   pathsSeeds,
 		Env: map[string]string{
 			"POSTGRES_USER":     configuration.Username,
 			"POSTGRES_PASSWORD": configuration.Password,

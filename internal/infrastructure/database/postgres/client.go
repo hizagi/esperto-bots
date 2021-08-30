@@ -7,8 +7,13 @@ import (
 	"time"
 
 	"github.com/hizagi/esperto-bots/internal/infrastructure/config/viper"
+	"github.com/hizagi/esperto-bots/projectpath"
 	_ "github.com/jackc/pgx/v4/stdlib"
 )
+
+func MigrationPath() string {
+	return projectpath.Root + "/internal/infrastructure/database/postgres/migrations"
+}
 
 type PostgresClient struct {
 	Connection *sql.DB
