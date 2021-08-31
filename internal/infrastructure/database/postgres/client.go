@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	sq "github.com/Masterminds/squirrel"
 	"github.com/hizagi/esperto-bots/internal/infrastructure/config/viper"
 	"github.com/hizagi/esperto-bots/projectpath"
 	_ "github.com/jackc/pgx/v4/stdlib"
@@ -32,6 +33,10 @@ func NewPostgresClient(postgresConfiguration viper.PostgresConfiguration) *Postg
 	return &PostgresClient{
 		db,
 	}
+}
+
+func (client *PostgresClient) GetBuilder() sq.StatementBuilderType {
+	return sq.StatementBuilder.PlaceholderFormat(sq.Dollar).RunWith(client.Connection)
 }
 
 func (client *PostgresClient) Close() error {

@@ -13,10 +13,10 @@ import (
 	"github.com/pressly/goose"
 )
 
-func SetupDatabase(t *testing.T, seedFiles []string) (*postgres.PostgresClient, *viper.Configuration) {
+func SetupDatabase(t *testing.T) (*postgres.PostgresClient, *viper.Configuration) {
 	configuration := viper.NewConfiguration(projectpath.Root)
 
-	host, port := EmbedPostgres(t, seedFiles, configuration.PostgresConfiguration)
+	host, port := EmbedPostgres(t, configuration.PostgresConfiguration)
 
 	configuration.PostgresConfiguration.Host = host
 	configuration.PostgresConfiguration.Port = port

@@ -1,7 +1,6 @@
 package repositories_test
 
 import (
-	"log"
 	"testing"
 
 	"github.com/hizagi/esperto-bots/internal/infrastructure/database/mongodb/repositories"
@@ -28,14 +27,13 @@ func TestListCategoriesMongo(t *testing.T) {
 
 	categoryRepository := repositories.NewCategoryRepository(mongoClient)
 
-	categories, err := categoryRepository.ListCategory("6122557b844c5e9e368e7dd6", 2)
+	categories, cursor, err := categoryRepository.ListCategory("6122557b844c5e9e368e7dd6", 2)
 
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	log.Printf("%+v", categories[0])
-
 	assert.Equal(t, 2, len(categories))
 	assert.Equal(t, categories[0].ID, "612627aee7b1dd1d463bdd65")
+	assert.Equal(t, "612627d0392c056cd918c0f1", *cursor)
 }

@@ -19,6 +19,6 @@ func (service *CategoryService) GetCategory(id string) (*entities.Category, erro
 	return service.categoryRepository.GetCategory(id)
 }
 
-func (service *CategoryService) ListCategory(lastID string, pageSize int) ([]*entities.Category, error) {
+func (service *CategoryService) ListCategory(lastID string, pageSize int) ([]*entities.Category, *string, error) {
 	return service.categoryRepository.ListCategory(lastID, pageSize)
 }

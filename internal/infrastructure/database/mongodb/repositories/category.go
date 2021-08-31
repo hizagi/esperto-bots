@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/hizagi/esperto-bots/internal/domain/entities"
 	"github.com/hizagi/esperto-bots/internal/infrastructure/database/mongodb"
@@ -37,7 +36,7 @@ func (repository *CategoryRepository) GetCategory(id string) (*entities.Category
 	return category.ToDomain(), nil
 }
 
-func (repository *CategoryRepository) ListCategory(lastID string, pageSize int) ([]*entities.Category, error) {
+func (repository *CategoryRepository) ListCategory(lastID string, pageSize int) ([]*entities.Category, *string, error) {
 	ctx := context.Background()
 
 	filter := bson.M{
@@ -53,7 +52,7 @@ func (repository *CategoryRepository) ListCategory(lastID string, pageSize int) 
 	cursor, err := repository.mongoCollection.Find(ctx, filter, findOptions)
 
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	var categories []*entities.Category
@@ -63,13 +62,13 @@ func (repository *CategoryRepository) ListCategory(lastID string, pageSize int) 
 
 		err := cursor.Decode(&category)
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
-
-		fmt.Printf("ToDomain: %+v", category.ToDomain())
 
 		categories = append(categories, category.ToDomain())
 	}
 
-	return categories, nil
+	categoriesLength := len(categories) - 1
+
+	return categories, &categories[categoriesLength].ID, nil
 }

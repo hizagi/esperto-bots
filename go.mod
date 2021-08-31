@@ -3,8 +3,10 @@ module github.com/hizagi/esperto-bots
 go 1.16
 
 require (
+	github.com/Masterminds/squirrel v1.5.0
 	github.com/docker/go-connections v0.4.0
 	github.com/georgysavva/scany v0.2.9
+	github.com/google/uuid v1.2.0
 	github.com/jackc/pgx/v4 v4.13.0
 	github.com/kristijorgji/goseeder v1.0.2
 	github.com/pressly/goose v2.7.0+incompatible

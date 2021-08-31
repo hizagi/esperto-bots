@@ -19,7 +19,7 @@ const (
 )
 
 //EmbedPostgres spins up a postgres container.
-func EmbedPostgres(t *testing.T, seedFiles []string, configuration viper.PostgresConfiguration) (string, int) {
+func EmbedPostgres(t *testing.T, configuration viper.PostgresConfiguration) (string, int) {
 	t.Helper()
 
 	ctx := context.Background()
