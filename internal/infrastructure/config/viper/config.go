@@ -7,6 +7,7 @@ import (
 )
 
 type Configuration struct {
+	AuthConfiguration     AuthConfiguration     `mapstructure:"auth_configuration"`
 	MongoConfiguration    MongoConfiguration    `mapstructure:"mongo_configuration"`
 	PostgresConfiguration PostgresConfiguration `mapstructure:"postgres_configuration"`
 }
