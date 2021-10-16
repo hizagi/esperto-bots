@@ -9,18 +9,18 @@ import (
 
 type Category struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty"`
-	ParentID  string             `json:"parent_id"`
-	Name      string             `json:"name"`
-	Slug      string             `json:"slug"`
-	CreatedAt time.Time          `json:"created_at"`
-	UpdatedAt time.Time          `json:"updated_at"`
-	DeletedAt time.Time          `json:"deleted_at"`
+	ParentID  *string            `bson:"parent_id"`
+	Name      string             `bson:"name"`
+	Slug      string             `bson:"slug"`
+	CreatedAt time.Time          `bson:"created_at"`
+	UpdatedAt time.Time          `bson:"updated_at"`
+	DeletedAt time.Time          `bson:"deleted_at"`
 }
 
 func (category *Category) ToDomain() *entities.Category {
 	return &entities.Category{
 		ID:        category.ID.Hex(),
-		ParentID:  &category.ParentID,
+		ParentID:  category.ParentID,
 		Name:      category.Name,
 		Slug:      category.Slug,
 		CreatedAt: category.CreatedAt,

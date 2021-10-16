@@ -1,19 +1,16 @@
 package postgres
 
 import (
-	"fmt"
-	"os"
 	"testing"
 
 	"github.com/hizagi/esperto-bots/internal/infrastructure/config/viper"
 	"github.com/hizagi/esperto-bots/internal/infrastructure/database/postgres"
 	"github.com/hizagi/esperto-bots/internal/infrastructure/database/postgres/seeds"
 	"github.com/hizagi/esperto-bots/projectpath"
-	"github.com/kristijorgji/goseeder"
 	"github.com/pressly/goose"
 )
 
-func SetupDatabase(t *testing.T) (*postgres.PostgresClient, *viper.Configuration) {
+func SetupDatabase(t *testing.T, seedMethodNames ...string) (*postgres.PostgresClient, *viper.Configuration) {
 	configuration := viper.NewConfiguration(projectpath.Root)
 
 	host, port := EmbedPostgres(t, configuration.PostgresConfiguration)
@@ -23,18 +20,11 @@ func SetupDatabase(t *testing.T) (*postgres.PostgresClient, *viper.Configuration
 
 	postgresClient := postgres.NewPostgresClient(configuration.PostgresConfiguration)
 
-	fmt.Printf("Migration Path: %+v", postgres.MigrationPath())
-
 	if err := goose.Up(postgresClient.Connection, postgres.MigrationPath()); err != nil {
 		panic(err)
 	}
 
-	seeds.Init()
-	err := goseeder.Execute(postgresClient.Connection)
-	if err != nil {
-		fmt.Printf("Seeding test data failed\n Err: %+v", err)
-		os.Exit(-2)
-	}
+	seeds.RunSeeds(postgresClient.Connection, seedMethodNames...)
 
 	return postgresClient, configuration
 }

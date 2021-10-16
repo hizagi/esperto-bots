@@ -1,7 +1,6 @@
 package repositories_test
 
 import (
-	"fmt"
 	"testing"
 	"time"
 
@@ -43,9 +42,6 @@ func TestListCategoriesPostgres(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-
-	fmt.Printf("SLICE RETURNED: %+v", categories[0])
-	fmt.Printf("SLICE RETURNED: %+v", categories[1])
 
 	assert.Equal(t, 2, len(categories))
 	assert.Equal(t, "2a3eb41e-2ccf-4357-a7cb-b0d491a53b96", categories[0].ID)

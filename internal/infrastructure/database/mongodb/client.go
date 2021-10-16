@@ -34,6 +34,10 @@ func NewMongoDbClient(mongoConfiguration viper.MongoConfiguration) *MongoDBClien
 	}
 }
 
+func (client *MongoDBClient) GetDatabase() *mongo.Database {
+	return client.internalClient.Database(client.databaseName)
+}
+
 func (client *MongoDBClient) GetCollection(collectionName string) *mongo.Collection {
 	return client.internalClient.Database(client.databaseName).Collection(collectionName)
 }

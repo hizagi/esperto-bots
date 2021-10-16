@@ -8,7 +8,6 @@ import (
 
 	"github.com/docker/go-connections/nat"
 	"github.com/hizagi/esperto-bots/internal/infrastructure/config/viper"
-	"github.com/hizagi/esperto-bots/projectpath"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 )
@@ -18,28 +17,9 @@ const (
 	logMsg = "Waiting for connections"
 )
 
-const databaseContainerSeedDir = "/docker-entrypoint-initdb.d/"
-
-func getSeedDataDirectory(databaseName string, seedFiles []string) map[string]string {
-	paths := make(map[string]string, 0)
-
-	for _, seedFile := range seedFiles {
-
-		path := projectpath.Root + "/internal/infrastructure/database/" + databaseName + "/seeds/" + seedFile
-
-		paths[path] = databaseContainerSeedDir + seedFile
-	}
-
-	return paths
-}
-
 //EmbeddedPostgres spins up a postgres container.
-func EmbedMongo(t *testing.T, seedFiles []string, configuration viper.MongoConfiguration) (string, int) {
+func EmbedMongo(t *testing.T, configuration viper.MongoConfiguration) (string, int) {
 	t.Helper()
-
-	paths := getSeedDataDirectory("mongodb", seedFiles)
-
-	fmt.Printf("TESTANDO: \n Root: %s, \n Paths: %+v", projectpath.Root, paths)
 
 	ctx := context.Background()
 	natPort := fmt.Sprintf("%d/tcp", 27017)
@@ -47,7 +27,6 @@ func EmbedMongo(t *testing.T, seedFiles []string, configuration viper.MongoConfi
 	req := testcontainers.ContainerRequest{
 		Image:        image,
 		ExposedPorts: []string{natPort},
-		BindMounts:   paths,
 		Env: map[string]string{
 			"MONGO_INITDB_ROOT_USERNAME": configuration.Username,
 			"MONGO_INITDB_ROOT_PASSWORD": configuration.Password,

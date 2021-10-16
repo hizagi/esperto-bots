@@ -1,7 +1,6 @@
 package postgres
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"testing"
@@ -45,13 +44,7 @@ func EmbedPostgres(t *testing.T, configuration viper.PostgresConfiguration) (str
 		},
 	)
 	if err != nil {
-		reader, _ := pg.Logs(ctx)
-		buf := new(bytes.Buffer)
-		buf.ReadFrom(reader)
-
-		fmt.Printf("CONTAINER LOGS: %s", buf.String())
-
-		t.Error(err)
+		t.Fatal(err)
 	}
 	// Even after log message found Postgres needs a touch more...
 	time.Sleep(200 * time.Millisecond)

@@ -4,12 +4,13 @@ import (
 	"testing"
 
 	"github.com/hizagi/esperto-bots/internal/infrastructure/database/mongodb/repositories"
+	"github.com/hizagi/esperto-bots/internal/infrastructure/database/mongodb/seeds"
 	"github.com/hizagi/esperto-bots/internal/infrastructure/test/container/mongodb"
 	"gotest.tools/v3/assert"
 )
 
 func TestGetUserMongo(t *testing.T) {
-	mongoClient, _ := mongodb.SetupDatabase(t, []string{"user.js"})
+	mongoClient, _ := mongodb.SetupDatabase(t, seeds.SEED_USERS)
 
 	userRepository := repositories.NewUserRepository(mongoClient)
 
@@ -19,5 +20,5 @@ func TestGetUserMongo(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	assert.Equal(t, "joao", user.Name)
+	assert.Equal(t, "Joao", user.Name)
 }

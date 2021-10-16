@@ -9,15 +9,15 @@ import (
 
 type User struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty"`
-	Email     string             `json:"email"`
-	Name      string             `json:"name"`
-	Lastname  string             `json:"lastname"`
-	Password  string             `json:"password"`
-	Document  string             `json:"document"`
-	BirthDate string             `json:"birth_date"`
-	CreatedAt time.Time          `json:"created_at"`
-	UpdatedAt time.Time          `json:"updated_at"`
-	DeletedAt time.Time          `json:"deleted_at"`
+	Email     string             `bson:"email"`
+	Name      string             `bson:"name"`
+	Lastname  string             `bson:"lastname"`
+	Password  string             `bson:"password"`
+	Document  string             `bson:"document"`
+	BirthDate string             `bson:"birth_date"`
+	CreatedAt time.Time          `bson:"created_at"`
+	UpdatedAt time.Time          `bson:"updated_at"`
+	DeletedAt time.Time          `bson:"deleted_at"`
 }
 
 func (user *User) ToDomain() *entities.User {
